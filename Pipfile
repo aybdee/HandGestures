@@ -7,6 +7,8 @@ name = "pypi"
 mediapipe = "*"
 torch = "*"
 torchvision = "*"
+tensorflow = "*"
+dearpygui = "*"
 
 [dev-packages]
 ipykernel = "*"
