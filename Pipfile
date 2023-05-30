@@ -8,7 +8,8 @@ mediapipe = "*"
 torch = "*"
 torchvision = "*"
 tensorflow = "*"
-dearpygui = "*"
+pygubu-designer = "*"
+customtkinter = "*"
 
 [dev-packages]
 ipykernel = "*"
