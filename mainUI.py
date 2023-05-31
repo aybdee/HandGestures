@@ -12,8 +12,6 @@ def openf():
     return filedialog.askopenfilename(initialdir='~', title="select powerpoint file")
 
 
-
-
 class ToplevelWindow(customtkinter.CTkToplevel):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -29,20 +27,32 @@ class SidebarFrame (customtkinter.CTkFrame):
         super().__init__(master)
         self.open_button = customtkinter.CTkButton(self,text="Open..",command=master.get_file)
         self.open_button.grid(row=2,column=0,padx=20,pady=20,sticky="nsw")
-        self.toplevel_window = None
+
+
+class TimeLineFrame(customtkinter.CTkFrame):
+    def __init__(self,master):
+        super().__init__(master)
+
 
 
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
         self.file_dir = None
+        self.toplevel_window = None
         self.title("Powerpoint Gestures")
         self.geometry(f"{1100}x{580}")
         customtkinter.set_widget_scaling(1.25)
 
         self.sidebarframe = SidebarFrame(self)
         self.grid_rowconfigure(0,weight=1)
-        self.sidebarframe.grid(row=0,column=0,sticky='nsw')
+        self.sidebarframe.grid(row=0,column=0,rowspan=4,sticky='nsew')
+
+
+
+        self.timelineframe = TimeLineFrame(self)
+        self.grid_columnconfigure(1,weight=1)
+        self.timelineframe.grid(row=1,column=1,padx = 10,sticky='nws')
 
     def get_file(self):
         file_dir = openf()
@@ -51,10 +61,6 @@ class App(customtkinter.CTk):
         else:
             self.toplevel_window = ToplevelWindow(self)
             self.toplevel_window.focus()
-
-        
-
-
 
 if __name__ == "__main__":
     app = App()
