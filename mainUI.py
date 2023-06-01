@@ -1,3 +1,5 @@
+import os
+import subprocess
 import tkinter
 import cv2
 import numpy as np
@@ -6,7 +8,7 @@ import customtkinter
 from tkinter import filedialog
 from PIL import Image, ImageTk
 
-# from mp_utils import annotate_hands
+from mp_utils import annotate_hands, annotate_body
 
 
 customtkinter.set_appearance_mode(
@@ -18,38 +20,6 @@ customtkinter.set_default_color_theme(
 
 
 # global cam
-
-
-# def start_cam(image_panel):
-#     global cam
-#     global frame
-#     cam = cv2.VideoCapture(0)
-#     while True:
-#         ret, frame = cam.read()
-#         # convert frame to RGB
-#         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-#         img_update = ImageTk.PhotoImage(Image.fromarray(frame))
-#         image_panel.configure(image=img_update)
-#         image_panel.update()
-
-#         if not ret:
-#             # handle error
-#             print("failed to get frame")
-#             break
-#         k = cv2.waitKey(1)
-#         if k % 256 == 27:
-#             # ESC pressed
-#             print("Escape hit, closing...")
-
-#             cam.release()
-#             cv2.destroyAllWindows()
-#             break
-
-
-# def stop_cam():
-#     global cam
-#     cam.release()
-#     cv2.destroyAllWindows()
 
 
 def openf():
@@ -203,8 +173,9 @@ class App(customtkinter.CTk):
         # create slider and progressbar frame
         self.slider_progressbar_frame = customtkinter.CTkFrame(self, fg_color="#191717")
         self.slider_progressbar_frame.grid(
-            row=1, column=1, padx=(20, 0), rowspan=3, pady=(20, 0), sticky="nsew"
+            row=0, column=1, padx=(20, 0), rowspan=4, pady=(20, 0), sticky="nsew"
         )
+        self.rowconfigure(1, weight=1)
         self.slider_progressbar_frame.grid_columnconfigure(0, weight=1)
         self.slider_progressbar_frame.grid_rowconfigure(4, weight=1)
         self.seg_button_1 = customtkinter.CTkSegmentedButton(
@@ -256,25 +227,31 @@ class App(customtkinter.CTk):
         self.seg_button_1.set("View 2")
 
     def start_cam(self):
-        self.cam = cv2.VideoCapture(0)
-        while True:
-            ret, frame = self.cam.read()
-            frame = cv2.flip(frame, 1)
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        subprocess.run(["python", "short_distance.py"])
+        # self.cam = cv2.VideoCapture(0)
+        # while True:
+        #     ret, frame = self.cam.read()
+        #     if self.radio_var.get() == 1:
+        #         annotate_hands(frame)
+        #     elif self.radio_var.get() == 0:
+        #         annotate_body(frame)
+        #     frame = cv2.flip(frame, 1)
+        #     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        #     image_update = customtkinter.CTkImage(
+        #         Image.fromarray(frame), size=(900, 600)
+        #     )
+        #     self.feed_frame.configure(image=image_update)
+        #     self.feed_frame.update()
 
-            image_update = ImageTk.PhotoImage(Image.fromarray(frame))
-            self.feed_frame.configure(image=image_update)
-            self.feed_frame.update()
-
-            if not ret:
-                # add better error handling here
-                print("failed to grab frame")
-            k = cv2.waitKey(1)
-            if k % 256 == 27:
-                print("closing feed")
-                self.cam.release()
-                cv2.destroyAllWindows()
-                break
+        #     if not ret:
+        #         # add better error handling here
+        #         print("failed to grab frame")
+        #     k = cv2.waitKey(1)
+        #     if k % 256 == 27:
+        #         print("closing feed")
+        #         self.cam.release()
+        #         cv2.destroyAllWindows()
+        #         break
 
     def open_input_dialog_event(self):
         dialog = customtkinter.CTkInputDialog(
