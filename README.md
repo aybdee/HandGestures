@@ -2,7 +2,8 @@
 
 control power point sildes with gestures
 
-to run requirements with poetry
+to run 
+install requirements with poetry
 ```bash
 poetry install
 ```
